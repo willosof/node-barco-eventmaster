@@ -1,8 +1,9 @@
 {
   "name": "barco-eventmaster",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Barco EventMaster JSON REST API wrapper",
   "main": "index.js",
+  "keywords": ["barco","e2","s3","eventmaster"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
