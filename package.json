@@ -1,0 +1,22 @@
+{
+  "name": "eventmaster",
+  "version": "0.0.1",
+  "description": "Barco E2/S3 EventMaster JSON REST Functions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willosof/node-eventmaster.git"
+  },
+  "author": "William Viker <william.viker@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/willosof/node-eventmaster/issues"
+  },
+  "homepage": "https://github.com/willosof/node-eventmaster#readme",
+  "dependencies": {
+    "node-rest-client": "^3.1.0"
+  }
+}
