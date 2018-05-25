@@ -27,7 +27,7 @@ eventmaster.prototype.query = function(method,params,cb) {
 		}
 	};
 
-	self.rest.post("http://"+self.ip+":9999/jsonrpc", args, function (data, response) {
+	return self.rest.post("http://"+self.ip+":9999/jsonrpc", args, function (data, response) {
 		if (cb !== undefined && typeof cb === "function") {
 			if (data.result !== undefined && data.result.success == 0) {
 				cb(null, data.result.response);
@@ -60,7 +60,7 @@ Example
 
 eventmaster.prototype.allTrans = function(cb) {
 	var self = this;
-	self.query("allTrans", {}, cb);
+	return self.query("allTrans", {}, cb);
 }
 
 /*
@@ -81,7 +81,7 @@ Example
 
 eventmaster.prototype.cut = function(cb) {
 	var self = this;
-	self.query("cut", {}, cb);
+	return self.query("cut", {}, cb);
 }
 
 /*
@@ -104,7 +104,7 @@ Example
 
 eventmaster.prototype.resetFrameSettings = function(resetKind, cb) {
 	var self = this;
-	self.query("resetFrameSettings", { reset: resetKind }, cb);
+	return self.query("resetFrameSettings", { reset: resetKind }, cb);
 }
 
 /*
@@ -125,7 +125,7 @@ Example
 
 eventmaster.prototype.powerStatus = function(cb) {
 	var self = this;
-	self.query("powerStatus", {}, cb);
+	return self.query("powerStatus", {}, cb);
 }
 
 /*
@@ -150,7 +150,7 @@ eventmaster.prototype.listPresets = function(ScreenDest, AuxDest, cb) {
 	var self = this;
 	if (ScreenDest == null) ScreenDest = -1;
 	if (AuxDest == null) AuxDest = -1;
-	self.query("listPresets", { ScreenDest: ScreenDest, AuxDest: AuxDest }, cb);
+	return self.query("listPresets", { ScreenDest: ScreenDest, AuxDest: AuxDest }, cb);
 }
 
 /*
@@ -174,7 +174,7 @@ Example
 eventmaster.prototype.listDestinationsForPreset = function(presetId) {
 	var self = this;
 	if (presetId == null) presetId = -1;
-	self.query("listDestinationsForPreset", { id: presetId }, cb);
+	return self.query("listDestinationsForPreset", { id: presetId }, cb);
 }
 
 /*
@@ -199,7 +199,7 @@ Example
 
 eventmaster.prototype.savePreset = function(presetName, ScreenDestinationsArray, AuxDestinationsArray, cb) {
 	var self = this;
-	self.query("savePreset", {
+	return self.query("savePreset", {
 		presetName: presetName,
 		ScreenDestination: ScreenDestinationsArray,
 		AuxDestination: AuxDestinationsArray
@@ -234,17 +234,17 @@ Example
 
 eventmaster.prototype.renamePresetById = function(presetId, newPresetName, cb) {
 	var self = this;
-	self.query("renamePreset", { id: presetId, newPresetName: newPresetName }, cb);
+	return self.query("renamePreset", { id: presetId, newPresetName: newPresetName }, cb);
 }
 
 eventmaster.prototype.renamePresetBySno = function(presetSno, newPresetName, cb) {
 	var self = this;
-	self.query("renamePreset", { presetSno: presetSno, newPresetName: newPresetName }, cb);
+	return self.query("renamePreset", { presetSno: presetSno, newPresetName: newPresetName }, cb);
 }
 
 eventmaster.prototype.renamePresetByName = function(presetName, newPresetName, cb) {
 	var self = this;
-	self.query("renamePreset", { presetName: presetName, newPresetName: newPresetName }, cb);
+	return self.query("renamePreset", { presetName: presetName, newPresetName: newPresetName }, cb);
 }
 
 /*
@@ -275,17 +275,17 @@ Example
 
 eventmaster.prototype.activatePresetById = function(presetId, recallInProgramInt, cb) {
 	var self = this;
-	self.query("activatePreset", { id: presetId, type: recallInProgramInt }, cb);
+	return self.query("activatePreset", { id: presetId, type: recallInProgramInt }, cb);
 }
 
 eventmaster.prototype.activatePresetBySno = function(presetSno, recallInProgramInt, cb) {
 	var self = this;
-	self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt }, cb);
+	return self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt }, cb);
 }
 
 eventmaster.prototype.activatePresetByName = function(presetName, recallInProgramInt, cb) {
 	var self = this;
-	self.query("activatePreset", { presetName: presetName, type: recallInProgramInt }, cb);
+	return self.query("activatePreset", { presetName: presetName, type: recallInProgramInt }, cb);
 }
 
 /*
@@ -315,17 +315,17 @@ Example
 
 eventmaster.prototype.deletePresetById = function(presetId, cb) {
 	var self = this;
-	self.query("deletePreset", { id: presetId }, cb);
+	return self.query("deletePreset", { id: presetId }, cb);
 }
 
 eventmaster.prototype.deletePresetBySno = function(presetSno, cb) {
 	var self = this;
-	self.query("deletePreset", { presetSno: presetSno }, cb);
+	return self.query("deletePreset", { presetSno: presetSno }, cb);
 }
 
 eventmaster.prototype.deletePresetByName = function(presetName, cb) {
 	var self = this;
-	self.query("deletePreset", { presetName: presetName }, cb);
+	return self.query("deletePreset", { presetName: presetName }, cb);
 }
 
 /*
@@ -346,7 +346,7 @@ Example
 
 eventmaster.prototype.recallNextPreset = function(cb) {
 	var self = this;
-	self.query("recallNextPreset", {}, cb);
+	return self.query("recallNextPreset", {}, cb);
 }
 
 /*
@@ -369,7 +369,7 @@ Example
 
 eventmaster.prototype.listDestinations = function(type, cb) {
 	var self = this;
-	self.query("listDestinations", { type: type  }, cb);
+	return self.query("listDestinations", { type: type  }, cb);
 }
 
 /*
@@ -392,7 +392,7 @@ Example
 
 eventmaster.prototype.listSources = function(type, cb) {
 	var self = this;
-	self.query("listSources", { type: type }, cb);
+	return self.query("listSources", { type: type }, cb);
 }
 
 /*
@@ -418,7 +418,7 @@ Example
 
 eventmaster.prototype.listContent = function(id, cb) {
 	var self = this;
-	self.query("listContent", { id: id }, cb);
+	return self.query("listContent", { id: id }, cb);
 }
 
 /*
@@ -481,7 +481,7 @@ Example
 
 eventmaster.prototype.changeContent = function(screenDestIndex, bgLayer, Layers, cb) {
 	var self = this;
-	self.query("changeContent", { id: screenDestIndex, BGLyr: bgLayer, Layers: Layers }, cb);
+	return self.query("changeContent", { id: screenDestIndex, BGLyr: bgLayer, Layers: Layers }, cb);
 }
 
 /*
@@ -509,7 +509,7 @@ Example
 
 eventmaster.prototype.changeAuxContent = function(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
 	var self = this;
-	self.query("changeAuxContent", { id: id, Name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+	return self.query("changeAuxContent", { id: id, Name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
 }
 
 /*
@@ -537,7 +537,7 @@ Example
 
 eventmaster.prototype.freezeDestSource = function(type, id, screenGroup, mode, cb) {
 	var self = this;
-	self.query("freezeDestSource", { type: type, id: id, screengroup: screenGroup, mode: mode }, cb);
+	return self.query("freezeDestSource", { type: type, id: id, screengroup: screenGroup, mode: mode }, cb);
 }
 
 /*
@@ -560,7 +560,7 @@ Example
 
 eventmaster.prototype.listStill = function(cb) {
 	var self = this;
-	self.query("listStill", {}, cb);
+	return self.query("listStill", {}, cb);
 }
 
 /*
@@ -583,7 +583,7 @@ Example
 
 eventmaster.prototype.deleteStill = function(stillIndex,cb) {
 	var self = this;
-	self.query("deleteStill", { id:stillIndex }, cb);
+	return self.query("deleteStill", { id:stillIndex }, cb);
 }
 
 /*
@@ -610,7 +610,7 @@ Example
 
 eventmaster.prototype.takeStill = function(type, id, fileid, cb) {
 	var self = this;
-	self.query("takeStill", { type: type, id: id, file: fileid }, cb);
+	return self.query("takeStill", { type: type, id: id, file: fileid }, cb);
 }
 
 /*
@@ -633,7 +633,7 @@ Example
 
 eventmaster.prototype.getFrameSettings = function(cb) {
 	var self = this;
-	self.query("getFrameSettings", {}, cb);
+	return self.query("getFrameSettings", {}, cb);
 }
 
 /*
@@ -658,7 +658,7 @@ Example
 
 eventmaster.prototype.listAuxContent = function(auxDestIndex, cb) {
 	var self = this;
-	self.query("listAuxContent", { id: auxDestIndex }, cb);
+	return self.query("listAuxContent", { id: auxDestIndex }, cb);
 }
 
 /*
@@ -685,7 +685,7 @@ Example
 
 eventmaster.prototype.subscribe = function(hostname, port, notificationTypes, cb) {
 	var self = this;
-	self.query("subscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
+	return self.query("subscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
 }
 
 /*
@@ -706,7 +706,7 @@ Example
 
 eventmaster.prototype.unsubscribe = function(hostname, port, notificationTypes, cb) {
 	var self = this;
-	self.query("unsubscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
+	return self.query("unsubscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
 }
 
 exports = module.exports = eventmaster;
