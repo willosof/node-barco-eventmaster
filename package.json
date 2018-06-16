@@ -1,6 +1,6 @@
 {
   "name": "barco-eventmaster",
-  "version": "5.0.3",
+  "version": "5.1.0",
   "description": "Barco EventMaster JSON REST API wrapper",
   "main": "index.js",
   "keywords": ["barco","e2","s3","eventmaster"],

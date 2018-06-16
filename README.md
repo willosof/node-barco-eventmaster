@@ -17,12 +17,13 @@ var EventMaster = require('barco-eventmaster');
 var em = new EventMaster('10.0.0.1');
 
 // Get all preset names
-em.listPresets(-1, -1, function(presets) {
-	if (!err) {
+em.listPresets(-1, -1, function(err, presets) {
+	if (err !== null) {
 		console.log("Current presets");
 		console.log(presets);
 	}
 	else {
+		console.log(err);
 		throw "Something went wrong with the event master request";
 	}
 });
