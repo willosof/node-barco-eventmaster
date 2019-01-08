@@ -709,4 +709,55 @@ eventmaster.prototype.unsubscribe = function(hostname, port, notificationTypes, 
 	return self.query("unsubscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
 }
 
+/*
+Definition
+- This API provides the option to play/pause/stop a cue. User can recall cue with id, serial number, or name.
+
+Request:
+params: {"id": 1, "type": x}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
+- id – Index of the cue
+- type – (Default is play). x" can be : 0 — Play. 0 is the default value for the type parameter. 1 — Pause, 2 – Stop
+params: {"cueName": "Cue1", "type": x}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
+params: {"cueSerialNo": 1.00, "type": x}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
+
+Response:
+response: null
+success: (0=success, anything else is an error)
+
+Example:
+//Play – no parame or type 0
+- {"params": {"id": 1}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
+//Pause – type 1
+- {"params": {"type": 1}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
+//Stop – type 2
+- {"params": {"type": 2}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
+
+*/
+
+eventmaster.prototype.activateCue = function(id, type, cueName, cueSerialNo, cb) {
+	var self = this;
+	return self.query("activateCue", { id: id, port: type, cueName: cueName, cueSerialNo: cueSerialNo }, cb);
+}
+
+/*
+Definition:
+- This API lists all the cues.
+
+Request:
+params: {}, "method":"listCues", "id":"1234", "jsonrpc":"2.0"}
+- id – Index of the input config.
+
+Response:
+response: Array of cue objects.
+success: (0=success, anything else is an error)
+
+Example:
+- {"params": {}, "method":"listCues", "id":"1234", "jsonrpc":"2.0"}
+*/
+
+eventmaster.prototype.listCues = function(inputCondigIndex, cb) {
+	var self = this;
+	return self.query("listCues", { inputCondigIndex: inputCondigIndex }, cb);
+}
+
 exports = module.exports = eventmaster;
