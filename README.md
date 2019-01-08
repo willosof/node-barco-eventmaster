@@ -139,11 +139,11 @@ All the API calls is also in comments in the module source code over each functi
 
 `activateCue(id, type, cueName, cueSerialNo, cb)`
 
- - Activate cue in eventmaster cuelist
+ – Activate cue in eventmaster cuelist
 
 `listCues(inputCondigIndex, cb)`
 
- - List cues in eventmaster cuelist
+ – List cues in eventmaster cuelist
 
 
 ## Author
