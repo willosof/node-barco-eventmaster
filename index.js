@@ -22,7 +22,7 @@ eventmaster.prototype.query = function(method,params,cb) {
 			jsonrpc: "2.0",
 			id: "0"
 		},
-    headers: {
+		headers: {
 			"Content-Type": "application/json"
 		}
 	};
