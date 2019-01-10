@@ -142,23 +142,23 @@ All the API calls is also in comments in the module source code over each functi
 
  – User can use this API to remove the subscription for the given hostname: port and notificationType.
 
-'activateCueById(id, type, cb)'
+`activateCueById(id, type, cb)`
 
  – Activate cue in eventmaster cuelist
 
-'activateCueByCueName(cueName, type, cb)'
+`activateCueByCueName(cueName, type, cb)`
 
  – Activate cue in eventmaster cuelist
 
-'activateCueByCueSerialNo(cueSerialNo, type, cb)'
+`activateCueByCueSerialNo(cueSerialNo, type, cb)`
 
  – Activate cue in eventmaster cuelist
 
-'listCues = function(inputCondigIndex, cb)'
+`listCues = function(inputCondigIndex, cb)`
 
  – List cues in eventmaster cuelist
 
-'control3d(id, type, syncSource, syncInvert, cb)'
+`control3d(id, type, syncSource, syncInvert, cb)`
 
  – controls 3d options
 
