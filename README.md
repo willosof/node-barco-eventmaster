@@ -101,9 +101,14 @@ All the API calls is also in comments in the module source code over each functi
 
  – This API changes the content of a screen destination by putting background and layers in it.
 
-`changeAuxContent(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
+`changeAuxContent(auxDestIndex, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
 
  – This API changes the source in the Aux destinations.
+
+`changeAuxContentName(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
+
+ – This API changes the source in the Aux destinations.
+ - and change the name of that aux
 
 `freezeDestSource(type, id, screenGroup, mode, cb)`
 

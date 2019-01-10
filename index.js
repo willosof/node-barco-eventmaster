@@ -507,9 +507,14 @@ Example
 –	{"params": {"id":0 , "Name": "AuxDest1" , "PvwLastSrcIndex": 6 , "PgmLastSrcIndex":1}, "method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
 */
 
-eventmaster.prototype.changeAuxContent = function(id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+eventmaster.prototype.changeAuxContent = function(id, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
 	var self = this;
-	return self.query("changeAuxContent", { id: id, Name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+	return self.query("changeAuxContent", { id: id, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+}
+
+eventmaster.prototype.changeAuxContentName = function(id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+	var self = this;
+	return self.query("changeAuxContent", { id: id, name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
 }
 
 /*
