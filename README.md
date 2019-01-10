@@ -101,9 +101,14 @@ All the API calls is also in comments in the module source code over each functi
 
  – This API changes the content of a screen destination by putting background and layers in it.
 
-`changeAuxContent(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
+`changeAuxContent(auxDestIndex, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
 
  – This API changes the source in the Aux destinations.
+
+`changeAuxContentName(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
+
+ – This API changes the source in the Aux destinations.
+ - and change the name of that aux
 
 `freezeDestSource(type, id, screenGroup, mode, cb)`
 
@@ -137,14 +142,25 @@ All the API calls is also in comments in the module source code over each functi
 
  – User can use this API to remove the subscription for the given hostname: port and notificationType.
 
-`activateCue(id, type, cueName, cueSerialNo, cb)`
+'activateCueById(id, type, cb)'
 
  – Activate cue in eventmaster cuelist
 
-`listCues(inputCondigIndex, cb)`
+'activateCueByCueName(cueName, type, cb)'
+
+ – Activate cue in eventmaster cuelist
+
+'activateCueByCueSerialNo(cueSerialNo, type, cb)'
+
+ – Activate cue in eventmaster cuelist
+
+'listCues = function(inputCondigIndex, cb)'
 
  – List cues in eventmaster cuelist
 
+'control3d(id, type, syncSource, syncInvert, cb)'
+
+ – controls 3d options
 
 ## Author
 William Viker

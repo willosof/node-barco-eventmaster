@@ -8,7 +8,7 @@ function eventmaster(ip) {
 	self.rest = new rest();
 	if (ip == undefined) {
 		console.error("NO IP SPECIFIED FOR EVENTMASTER")
- 		return;
+		 return;
 	}
 	return self;
 }
@@ -507,9 +507,14 @@ Example
 –	{"params": {"id":0 , "Name": "AuxDest1" , "PvwLastSrcIndex": 6 , "PgmLastSrcIndex":1}, "method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
 */
 
-eventmaster.prototype.changeAuxContent = function(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+eventmaster.prototype.changeAuxContent = function(id, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
 	var self = this;
-	return self.query("changeAuxContent", { id: id, Name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+	return self.query("changeAuxContent", { id: id, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+}
+
+eventmaster.prototype.changeAuxContentName = function(id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+	var self = this;
+	return self.query("changeAuxContent", { id: id, name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
 }
 
 /*
@@ -731,12 +736,19 @@ Example:
 - {"params": {"type": 1}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
 //Stop – type 2
 - {"params": {"type": 2}, "method":"activateCue", "id":"1234", "jsonrpc":"2.0"}
-
 */
 
-eventmaster.prototype.activateCue = function(id, type, cueName, cueSerialNo, cb) {
+eventmaster.prototype.activateCueById = function(id, type, cb) {
 	var self = this;
-	return self.query("activateCue", { id: id, port: type, cueName: cueName, cueSerialNo: cueSerialNo }, cb);
+	return self.query("activateCue", { id: id, type: type }, cb);
+}
+eventmaster.prototype.activateCueByCueName = function(cueName, type, cb) {
+	var self = this;
+	return self.query("activateCue", { cueName: cueName, type: type }, cb);
+}
+eventmaster.prototype.activateCueByCueSerialNo = function(cueSerialNo, type, cb) {
+	var self = this;
+	return self.query("activateCue", { cueSerialNo: cueSerialNo, type: type }, cb);
 }
 
 /*
@@ -760,4 +772,29 @@ eventmaster.prototype.listCues = function(inputCondigIndex, cb) {
 	return self.query("listCues", { inputCondigIndex: inputCondigIndex }, cb);
 }
 
+/*
+Definition:
+- This API provides the option to modify 3d Controls.
+
+Request:
+params: {"id" : id, "type": x, "syncSource": y, "syncInvert": z}
+- id – Index of the input config.
+- type – "x" can be: 0 – Type Off. 0 is the default value for the type parameter. 1 – Type Sequentia.
+- syncSource – "y" can be: 1 – mini-Din 1, 2 – mini-Din 2, 3 – mini-Din 3, 4 – mini-Din 4. Default value is 1.
+- syncInvert – "z" can be: 0 – Type Off. 0 is the default value for the syncInvert. 1 – Type Invert.
+- To reset, do not provide any parameter except "id".
+
+Response:
+- response: {"id": 0, "Name": "InSource1", "HSize": 3840, "VSize": 1080, "Src-Type": 0, "InputCfgIndex": -1, "StillIndex": 0, "DestIndex": -1, "UserKeyIndex": -1, "Mode3D": 0, "Freeze": 1, "Capacity": 2, "InputCfgVideoStatus": 4}
+- success: (0=success, anything else is an error)
+
+Example:
+- {"params": {"id": 1, "type": 0, "syncSource": 1, "syncInvert": 0},
+"method":"3dControl", "id":"1234", "jsonrpc":"2.0"}
+*/
+
+eventmaster.prototype.control3d = function(id, type, syncSource, syncInvert, cb) {
+	var self = this;
+	return self.query("3dControl", { id: id, type: type, syncSource: syncSource, syncInvert: syncInvert }, cb);
+}
 exports = module.exports = eventmaster;
