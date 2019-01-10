@@ -8,7 +8,7 @@ function eventmaster(ip) {
 	self.rest = new rest();
 	if (ip == undefined) {
 		console.error("NO IP SPECIFIED FOR EVENTMASTER")
- 		return;
+		 return;
 	}
 	return self;
 }
@@ -507,7 +507,7 @@ Example
 –	{"params": {"id":0 , "Name": "AuxDest1" , "PvwLastSrcIndex": 6 , "PgmLastSrcIndex":1}, "method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
 */
 
-eventmaster.prototype.changeAuxContent = function(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+eventmaster.prototype.changeAuxContent = function(id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
 	var self = this;
 	return self.query("changeAuxContent", { id: id, Name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
 }
