@@ -162,7 +162,10 @@ All the API calls is also in comments in the module source code over each functi
  – controls 3d options
 
 ## Author
-William Viker
+William Viker 
 <william.viker@gmail.com>
 
+## Contributors
+Jeffrey Davidsz 
+<jeffrey.davidsz@vicreo.eu>
 Please file a ticket or pull request in github if you find something that should be better. And, well, if something isn't working.
