@@ -137,6 +137,15 @@ All the API calls is also in comments in the module source code over each functi
 
  – User can use this API to remove the subscription for the given hostname: port and notificationType.
 
+`activateCue(id, type, cueName, cueSerialNo, cb)`
+
+ – Activate cue in eventmaster cuelist
+
+`listCues(inputCondigIndex, cb)`
+
+ – List cues in eventmaster cuelist
+
+
 ## Author
 William Viker
 <william.viker@gmail.com>
