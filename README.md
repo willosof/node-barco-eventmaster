@@ -107,8 +107,7 @@ All the API calls is also in comments in the module source code over each functi
 
 `changeAuxContentName(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
 
- – This API changes the source in the Aux destinations.
- - and change the name of that aux
+ – This API changes the source in the Aux destinations. (and change the name of that aux?)
 
 `freezeDestSource(type, id, screenGroup, mode, cb)`
 
