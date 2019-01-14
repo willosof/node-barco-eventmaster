@@ -107,8 +107,7 @@ All the API calls is also in comments in the module source code over each functi
 
 `changeAuxContentName(auxDestIndex, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)`
 
- – This API changes the source in the Aux destinations.
- - and change the name of that aux
+ – This API changes the source in the Aux destinations. (and change the name of that aux?)
 
 `freezeDestSource(type, id, screenGroup, mode, cb)`
 
@@ -142,28 +141,33 @@ All the API calls is also in comments in the module source code over each functi
 
  – User can use this API to remove the subscription for the given hostname: port and notificationType.
 
-'activateCueById(id, type, cb)'
+`activateCueById(id, type, cb)`
 
  – Activate cue in eventmaster cuelist
 
-'activateCueByCueName(cueName, type, cb)'
+`activateCueByCueName(cueName, type, cb)`
 
  – Activate cue in eventmaster cuelist
 
-'activateCueByCueSerialNo(cueSerialNo, type, cb)'
+`activateCueByCueSerialNo(cueSerialNo, type, cb)`
 
  – Activate cue in eventmaster cuelist
 
-'listCues = function(inputCondigIndex, cb)'
+`listCues = function(inputCondigIndex, cb)`
 
  – List cues in eventmaster cuelist
 
-'control3d(id, type, syncSource, syncInvert, cb)'
+`control3d(id, type, syncSource, syncInvert, cb)`
 
  – controls 3d options
 
 ## Author
-William Viker
+William Viker 
 <william.viker@gmail.com>
 
-Please file a ticket or pull request in github if you find something that should be better. And, well, if something isn't working.
+## Contributors
+Jeffrey Davidsz 
+<jeffrey.davidsz@vicreo.eu>
+
+## Bugs or wishes
+Please file a ticket or pull request in github if you find something that should be better. And, well, if something isn't working properly.
