@@ -767,9 +767,9 @@ Example:
 - {"params": {}, "method":"listCues", "id":"1234", "jsonrpc":"2.0"}
 */
 
-eventmaster.prototype.listCues = function(inputCondigIndex, cb) {
+eventmaster.prototype.listCues = function(cb) {
 	var self = this;
-	return self.query("listCues", { inputCondigIndex: inputCondigIndex }, cb);
+	return self.query("listCues", {}, cb);
 }
 
 /*
