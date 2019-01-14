@@ -153,7 +153,7 @@ All the API calls is also in comments in the module source code over each functi
 
  – Activate cue in eventmaster cuelist
 
-`listCues = function(inputCondigIndex, cb)`
+`listCues = function(cb)`
 
  – List cues in eventmaster cuelist
 
