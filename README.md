@@ -33,7 +33,7 @@ return self;
 ## Available API calls
 Some of the calls have slightly modified variable names going into the function than the ones specified in the documentation to help out the editors with autocompletion/hints. Some of the API calls will also need further looking into documentation on formatting, due to their complexity, it would gain noone to implement this into this module.
 
-All the API calls is also in comments in the module source code over each function delcaration.
+All the API calls is also in comments in the module source code over each function declaration.
 
 `allTrans(cb)`
 
@@ -161,12 +161,27 @@ All the API calls is also in comments in the module source code over each functi
 
  – controls 3d options
 
+## Functions supported from version 6.3.0
+
+`activateDestGroup(id, cb)`
+
+ – recalls a DestGroup
+
+`changeAuxContentTestPattern(id, testPattern, cb)`
+`changeContentTestPattern(id, testPattern, cb)`
+
+ – add test pattern control for changeContent for Screen Dest and changeAuxContent for Aux Dest
+
+`armUnarmDestination(arm, screenDestinations, auxDestinations, cb)`
+
+ – Ability to arm / unarm Destination
+
 ## Author
-William Viker 
+William Viker
 <william.viker@gmail.com>
 
 ## Contributors
-Jeffrey Davidsz 
+Jeffrey Davidsz
 <jeffrey.davidsz@vicreo.eu>
 
 ## Bugs or wishes

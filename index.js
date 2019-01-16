@@ -808,6 +808,10 @@ Example:
 params: {"id": 0},
 "method":"activateDestGroup", "id":"1234", "jsonrpc":"2.0"}
 */
+eventmaster.prototype.activateDestGroup = function(id, cb) {
+	var self = this;
+	return self.query("3dControl", { id: id }, cb);
+}
 
 /*
 Definition:
@@ -817,6 +821,10 @@ Example:
 params {"arm": 1 ,"ScreenDestination":[{"id": 0}, {"id": 2}], "AuxDestination":[{"id": 0}, {"id": 1}]},
 "method":"armUnarmDestination", "id":"1234", "jsonrpc":"2.0"}
 */
+eventmaster.prototype.armUnarmDestination = function(arm, screenDestinations, auxDestinations, cb) {
+	var self = this;
+	return self.query("armUnarmDestination", { arm: arm , ScreenDestination: screenSestinations, AuxDestination: auxDestinations}, cb);
+}
 
 /*
 Definition:
@@ -828,7 +836,14 @@ params:{"id":0, "TestPattern" :5 },
 Example:
 params:{"id":0, "TestPattern" :3 },
 "method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
-
-
 */
+eventmaster.prototype.changeAuxContentTestPatern = function(id, testPattern cb) {
+	var self = this;
+	return self.query("changeAuxContent", { id: id, TestPattern: testPattern }, cb);
+}
+eventmaster.prototype.changeContentTestPatern = function(id, testPattern cb) {
+	var self = this;
+	return self.query("changeContent", { id: id, TestPattern: testPattern }, cb);
+}
+
 exports = module.exports = eventmaster;
