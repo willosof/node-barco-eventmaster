@@ -837,11 +837,11 @@ Example:
 params:{"id":0, "TestPattern" :3 },
 "method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
 */
-eventmaster.prototype.changeAuxContentTestPatern = function(id, testPattern cb) {
+eventmaster.prototype.changeAuxContentTestPattern = function(id, testPattern, cb) {
 	var self = this;
 	return self.query("changeAuxContent", { id: id, TestPattern: testPattern }, cb);
 }
-eventmaster.prototype.changeContentTestPatern = function(id, testPattern cb) {
+eventmaster.prototype.changeContentTestPattern = function(id, testPattern, cb) {
 	var self = this;
 	return self.query("changeContent", { id: id, TestPattern: testPattern }, cb);
 }
