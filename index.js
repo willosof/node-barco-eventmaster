@@ -767,9 +767,9 @@ Example:
 - {"params": {}, "method":"listCues", "id":"1234", "jsonrpc":"2.0"}
 */
 
-eventmaster.prototype.listCues = function(inputCondigIndex, cb) {
+eventmaster.prototype.listCues = function(cb) {
 	var self = this;
-	return self.query("listCues", { inputCondigIndex: inputCondigIndex }, cb);
+	return self.query("listCues", {}, cb);
 }
 
 /*
@@ -797,4 +797,53 @@ eventmaster.prototype.control3d = function(id, type, syncSource, syncInvert, cb)
 	var self = this;
 	return self.query("3dControl", { id: id, type: type, syncSource: syncSource, syncInvert: syncInvert }, cb);
 }
+
+/**6.3.0 beta functions**/
+
+/*
+Definition:
+-This API recalls a DestGroup
+
+Example:
+params: {"id": 0},
+"method":"activateDestGroup", "id":"1234", "jsonrpc":"2.0"}
+*/
+eventmaster.prototype.activateDestGroup = function(id, cb) {
+	var self = this;
+	return self.query("3dControl", { id: id }, cb);
+}
+
+/*
+Definition:
+-This API has Ability to arm / unarm Destination
+
+Example:
+params {"arm": 1 ,"ScreenDestination":[{"id": 0}, {"id": 2}], "AuxDestination":[{"id": 0}, {"id": 1}]},
+"method":"armUnarmDestination", "id":"1234", "jsonrpc":"2.0"}
+*/
+eventmaster.prototype.armUnarmDestination = function(arm, screenDestinations, auxDestinations, cb) {
+	var self = this;
+	return self.query("armUnarmDestination", { arm: arm , ScreenDestination: screenSestinations, AuxDestination: auxDestinations}, cb);
+}
+
+/*
+Definition:
+-This API to add test pattern control for changeContent for Screen Dest and changeAuxContent for Aux Dest
+
+Example:
+params:{"id":0, "TestPattern" :5 },
+"method":"changeContent", "id":"1234", "jsonrpc":"2.0"}
+Example:
+params:{"id":0, "TestPattern" :3 },
+"method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
+*/
+eventmaster.prototype.changeAuxContentTestPattern = function(id, testPattern, cb) {
+	var self = this;
+	return self.query("changeAuxContent", { id: id, TestPattern: testPattern }, cb);
+}
+eventmaster.prototype.changeContentTestPattern = function(id, testPattern, cb) {
+	var self = this;
+	return self.query("changeContent", { id: id, TestPattern: testPattern }, cb);
+}
+
 exports = module.exports = eventmaster;
