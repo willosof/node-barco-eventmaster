@@ -810,7 +810,7 @@ params: {"id": 0},
 */
 eventmaster.prototype.activateDestGroup = function(id, cb) {
 	var self = this;
-	return self.query("3dControl", { id: id }, cb);
+	return self.query("activateDestGroup", { id: id }, cb);
 }
 
 /*
@@ -823,7 +823,7 @@ params {"arm": 1 ,"ScreenDestination":[{"id": 0}, {"id": 2}], "AuxDestination":[
 */
 eventmaster.prototype.armUnarmDestination = function(arm, screenDestinations, auxDestinations, cb) {
 	var self = this;
-	return self.query("armUnarmDestination", { arm: arm , ScreenDestination: screenSestinations, AuxDestination: auxDestinations}, cb);
+	return self.query("armUnarmDestination", { arm: arm , ScreenDestination: screenDestinations, AuxDestination: auxDestinations}, cb);
 }
 
 /*
