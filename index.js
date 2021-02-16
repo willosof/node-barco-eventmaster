@@ -289,6 +289,44 @@ eventmaster.prototype.activatePresetByName = function(presetName, recallInProgra
 }
 
 /*
+* Added in 8.2
+* "activatePreset": added parameters when Multi-Operator is active to recall a preset either as a particular normal operator or as the Super operator (with password). 
+* Example to recall preset 51 as operator 1: {"params": {"presetSno": 51, "operatorId": 0}, "method":"activatePreset", "id":"1234", "jsonrpc":"2.0"} 
+* Example to recall preset 51 as the Super operator: {"params": {"presetSno": 51, "password": "password"}, "method":"activatePreset", "id":"1234", "jsonrpc":"2.0"} 
+* NOTE: The additional user parameters must also be added in order to Delete or Save Presets and for All Trans & Cut commands when Multi-Operator is active on the system. 
+*/
+
+eventmaster.prototype.activatePresetByIdSuper = function(presetId, recallInProgramInt, password, cb) {
+	var self = this;
+	return self.query("activatePreset", { id: presetId, type: recallInProgramInt, password: password }, cb);
+}
+
+eventmaster.prototype.activatePresetBySnoSuper = function(presetSno, recallInProgramInt, password, cb) {
+	var self = this;
+	return self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt, password: password }, cb);
+}
+
+eventmaster.prototype.activatePresetByNameSuper = function(presetName, recallInProgramInt, password, cb) {
+	var self = this;
+	return self.query("activatePreset", { presetName: presetName, type: recallInProgramInt, password:password }, cb);
+}
+
+eventmaster.prototype.activatePresetByIdOperator = function(presetId, recallInProgramInt, operatorId, cb) {
+	var self = this;
+	return self.query("activatePreset", { id: presetId, type: recallInProgramInt, operatorId: operatorId }, cb);
+}
+
+eventmaster.prototype.activatePresetBySnoOperator = function(presetSno, recallInProgramInt, operatorId, cb) {
+	var self = this;
+	return self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt, operatorId: operatorId }, cb);
+}
+
+eventmaster.prototype.activatePresetByNameOperator = function(presetName, recallInProgramInt, operatorId, cb) {
+	var self = this;
+	return self.query("activatePreset", { presetName: presetName, type: recallInProgramInt, operatorId:operatorId }, cb);
+}
+
+/*
 Definition
 –	Delete a Preset on the Event Master processor. User can delete Preset with id, Preset serial number, or Preset name. –	Send any one of the parameters to delete Preset.
 
@@ -798,7 +836,7 @@ eventmaster.prototype.control3d = function(id, type, syncSource, syncInvert, cb)
 	return self.query("3dControl", { id: id, type: type, syncSource: syncSource, syncInvert: syncInvert }, cb);
 }
 
-/**6.3.0 beta functions**/
+/**6.3.0 functions**/
 
 /*
 Definition:
@@ -818,7 +856,7 @@ Definition:
 -This API has Ability to arm / unarm Destination
 
 Example:
-params {"arm": 1 ,"ScreenDestination":[{"id": 0}, {"id": 2}], "AuxDestination":[{"id": 0}, {"id": 1}]},
+params: {"arm": 1 ,"ScreenDestination":[{"id": 0}, {"id": 2}], "AuxDestination":[{"id": 0}, {"id": 1}]},
 "method":"armUnarmDestination", "id":"1234", "jsonrpc":"2.0"}
 */
 eventmaster.prototype.armUnarmDestination = function(arm, screenDestinations, auxDestinations, cb) {
@@ -844,6 +882,66 @@ eventmaster.prototype.changeAuxContentTestPattern = function(id, testPattern, cb
 eventmaster.prototype.changeContentTestPattern = function(id, testPattern, cb) {
 	var self = this;
 	return self.query("changeContent", { id: id, TestPattern: testPattern }, cb);
+}
+
+/**8.2 functions**/
+
+/*
+Definition:
+- Switch the active MVR layout per chassis in a system.  
+  Example:
+	"params": {"frameUnitId": 0, "mvrLayoutId": 0}
+	"method":"mvrLayoutChange", "id":"1234", "jsonrpc":"2.0"}
+	
+	to change the MVR in UnitID 0 to layout 1: {"params": {"frameUnitId": 0, "mvrLayoutId": 0}, "method":"mvrLayoutChange", "id":"1234", "jsonrpc":"2.0"} 
+*/
+eventmaster.prototype.mvrLayoutChange = function (frameUnitId, mvrLayoutId, cb) {
+	var self = this;
+	return self.query("mvrLayoutChange", {frameUnitId: frameUnitId, mvrLayoutId: mvrLayoutId}, cb);
+}
+
+/**
+ * listOperators": Return a list of the normal operators, their state of enablement, assigned destinations and preset range.
+ * Example to see the full ist of normal operators: {"params":{}, "method":"listOperators", "id":"1234", "jsonrpc":"2.0"} 
+ * @param {*} cb 
+ */
+eventmaster.prototype.listOperators = function (cb) {
+	var self = this;
+	return self.query("listOperators", {}, cb)
+}
+
+/**
+ * configureOperator: Configure the paramaters for normal operator functionality. See JSON documentation for all parameters that can be configured 
+ * Example to enable Operator 1: {"params": {"operatorId": 0, "enable": 1}, "method":"configureOperator", "id":"1234", "jsonrpc":"2.0"} 
+ * @param {*} operatorId 
+ * @param {*} enable 
+ * @param {*} cb 
+ */
+eventmaster.prototype.configureOperator = function(operatorId, enable, cb) {
+	var self = this;
+	return self.query("configureOperator", {operatorId: operatorId, enable: enable }, cb);
+}
+
+/**
+ * "listDestGroups" to return a list of all Destination Groups group names and IDs including all member destination names and IDs.   
+ * Example to return all Destination Groups: {"params": {}, "method":"listDestGroups", "id":"1234", "jsonrpc":"2.0"} 
+ * @param {*} cb 
+ */
+eventmaster.prototype.listDestGroups = function(cb) {
+	var self = this;
+	return self. query("listDestGroups", {}, cb);
+}
+
+/**
+ * "listDestGroups" to return a list of all Destination Groups group names and IDs including all member destination names and IDs.   
+ * An additional parameter ("destGroupId", "destGroupSno", "destGroupName") may be added to return only the names and IDs of a particular Destination Group 
+ * Example to return all Destination Groups: {"params": {destGroupId}, "method":"listDestGroups", "id":"1234", "jsonrpc":"2.0"} 
+ * @param {*} type (destGroupId, destGroupSno, destGroupName)
+ * @param {*} cb 
+ */
+eventmaster.prototype.listDestGroupsPerType = function(type, cb) {
+	var self = this;
+	return self. query("listDestGroups", {type}, cb);
 }
 
 exports = module.exports = eventmaster;
