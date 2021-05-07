@@ -1,15 +1,15 @@
-var util = require('util');
-var rest = require('node-rest-client').Client;
+var util = require('util')
+var rest = require('node-rest-client').Client
 
 function eventmaster(ip) {
-	var self = this;
-	self.ip = ip;
-	self.rest = new rest();
+	var self = this
+	self.ip = ip
+	self.rest = new rest()
 	if (ip == undefined) {
-		console.error("NO IP SPECIFIED FOR EVENTMASTER")
-		 return;
+		console.error('NO IP SPECIFIED FOR EVENTMASTER')
+		return
 	}
-	return self;
+	return self
 }
 /**
  * Query the E2 directly
@@ -17,32 +17,30 @@ function eventmaster(ip) {
  * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.query = function(method,params,cb) {
-	var self = this;
+eventmaster.prototype.query = function (method, params, cb) {
+	var self = this
 	var args = {
 		data: {
 			method: method,
 			params: params,
-			jsonrpc: "2.0",
-			id: "0"
+			jsonrpc: '2.0',
+			id: '0',
 		},
 		headers: {
-			"Content-Type": "application/json"
-		}
-	};
+			'Content-Type': 'application/json',
+		},
+	}
 
-	return self.rest.post("http://"+self.ip+":9999/jsonrpc", args, function (data, response) {
-		if (cb !== undefined && typeof cb === "function") {
+	return self.rest.post('http://' + self.ip + ':9999/jsonrpc', args, function (data, response) {
+		if (cb !== undefined && typeof cb === 'function') {
 			if (data.result !== undefined && data.result.success == 0) {
-				cb(null, data.result.response);
-			}
-			else {
-				cb(true, data);
+				cb(null, data.result.response)
+			} else {
+				cb(true, data)
 			}
 		}
-	});
-
-};
+	})
+}
 
 /**
 allTrans 
@@ -71,11 +69,20 @@ o	password— Super user password saved. When this is passed, actions will be pe
 –	{"params": {"operatorId" : 1}, "method":"allTrans", "id":"1234", "jsonrpc":"2.0"}
 –	{"params": {"password" : "123"}, "method":"allTrans", "id":"1234", "jsonrpc":"2.0"}
 
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.allTrans = function(cb) {
-	var self = this;
-	return self.query("allTrans", {}, cb);
+eventmaster.prototype.allTrans = function (type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('allTrans', { operatorId: params }, cb)
+		case 'super_user':
+			return self.query('allTrans', { password: params }, cb)
+		default:
+			return self.query('allTrans', {}, cb)
+	}
 }
 
 /**
@@ -113,11 +120,20 @@ o	password— Super user password saved. When this is passed, actions will be pe
 –	{"params": {"operatorId" : 1}, "method":"cut", "id":"1234", "jsonrpc":"2.0"}
 –	{"params": {"password" : "123"}, "method":"cut", "id":"1234", "jsonrpc":"2.0"}
 
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.cut = function(cb) {
-	var self = this;
-	return self.query("cut", {}, cb);
+eventmaster.prototype.cut = function (type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('cut', { operatorId: params }, cb)
+		case 'super_user':
+			return self.query('cut', { password: params }, cb)
+		default:
+			return self.query('cut', {}, cb)
+	}
 }
 
 /**
@@ -142,9 +158,9 @@ o	5: Power Down.
  * @param  {} resetKind
  * @param  {} cb
  */
-eventmaster.prototype.resetFrameSettings = function(resetKind, cb) {
-	var self = this;
-	return self.query("resetFrameSettings", { reset: resetKind }, cb);
+eventmaster.prototype.resetFrameSettings = function (resetKind, cb) {
+	var self = this
+	return self.query('resetFrameSettings', { reset: resetKind }, cb)
 }
 
 /**
@@ -167,9 +183,9 @@ o	3: Power supply module is present, and everything is OK.
 
  * @param  {} cb
  */
-eventmaster.prototype.powerStatus = function(cb) {
-	var self = this;
-	return self.query("powerStatus", {}, cb);
+eventmaster.prototype.powerStatus = function (cb) {
+	var self = this
+	return self.query('powerStatus', {}, cb)
 }
 
 /**
@@ -193,11 +209,11 @@ o	Response contains the array of presets. Above response contains id, name, lock
  * @param  {} AuxDest
  * @param  {} cb
  */
-eventmaster.prototype.listPresets = function(ScreenDest, AuxDest, cb) {
-	var self = this;
-	if (ScreenDest == null) ScreenDest = -1;
-	if (AuxDest == null) AuxDest = -1;
-	return self.query("listPresets", { ScreenDest: ScreenDest, AuxDest: AuxDest }, cb);
+eventmaster.prototype.listPresets = function (ScreenDest, AuxDest, cb) {
+	var self = this
+	if (ScreenDest == null) ScreenDest = -1
+	if (AuxDest == null) AuxDest = -1
+	return self.query('listPresets', { ScreenDest: ScreenDest, AuxDest: AuxDest }, cb)
 }
 
 /**
@@ -218,10 +234,10 @@ o	Response contains the array of Presets.
 
  * @param  {} presetId
  */
-eventmaster.prototype.listDestinationsForPreset = function(presetId) {
-	var self = this;
-	if (presetId == null) presetId = -1;
-	return self.query("listDestinationsForPreset", { id: presetId }, cb);
+eventmaster.prototype.listDestinationsForPreset = function (presetId) {
+	var self = this
+	if (presetId == null) presetId = -1
+	return self.query('listDestinationsForPreset', { id: presetId }, cb)
 }
 
 /**
@@ -270,14 +286,18 @@ Kindly note that 1.1 and 1.10 or 1.00 and 1 are same.
  * @param  {} AuxDestinationsArray
  * @param  {} cb
  */
-eventmaster.prototype.savePreset = function(presetName, ScreenDestinationsArray, AuxDestinationsArray, cb) {
-	var self = this;
-	return self.query("savePreset", {
-		presetName: presetName,
-		ScreenDestination: ScreenDestinationsArray,
-		AuxDestination: AuxDestinationsArray
-	}, cb);
-};
+eventmaster.prototype.savePreset = function (presetName, ScreenDestinationsArray, AuxDestinationsArray, cb) {
+	var self = this
+	return self.query(
+		'savePreset',
+		{
+			presetName: presetName,
+			ScreenDestination: ScreenDestinationsArray,
+			AuxDestination: AuxDestinationsArray,
+		},
+		cb
+	)
+}
 
 /**
 renamePreset
@@ -301,27 +321,27 @@ o	“newPresetName”—New Preset name to set.
  * @param  {} newPresetName
  * @param  {} cb
  */
-eventmaster.prototype.renamePresetById = function(presetId, newPresetName, cb) {
-	var self = this;
-	return self.query("renamePreset", { id: presetId, newPresetName: newPresetName }, cb);
+eventmaster.prototype.renamePresetById = function (presetId, newPresetName, cb) {
+	var self = this
+	return self.query('renamePreset', { id: presetId, newPresetName: newPresetName }, cb)
 }
 /**
  * @param  {} presetSno
  * @param  {} newPresetName
  * @param  {} cb
  */
-eventmaster.prototype.renamePresetBySno = function(presetSno, newPresetName, cb) {
-	var self = this;
-	return self.query("renamePreset", { presetSno: presetSno, newPresetName: newPresetName }, cb);
+eventmaster.prototype.renamePresetBySno = function (presetSno, newPresetName, cb) {
+	var self = this
+	return self.query('renamePreset', { presetSno: presetSno, newPresetName: newPresetName }, cb)
 }
 /**
  * @param  {} presetName
  * @param  {} newPresetName
  * @param  {} cb
  */
-eventmaster.prototype.renamePresetByName = function(presetName, newPresetName, cb) {
-	var self = this;
-	return self.query("renamePreset", { presetName: presetName, newPresetName: newPresetName }, cb);
+eventmaster.prototype.renamePresetByName = function (presetName, newPresetName, cb) {
+	var self = this
+	return self.query('renamePreset', { presetName: presetName, newPresetName: newPresetName }, cb)
 }
 
 /**
@@ -359,91 +379,63 @@ o	password— Super user password saved. When this is passed, actions will be pe
 
  * @param  {} presetId
  * @param  {} recallInProgramInt
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.activatePresetById = function(presetId, recallInProgramInt, cb) {
-	var self = this;
-	return self.query("activatePreset", { id: presetId, type: recallInProgramInt }, cb);
+eventmaster.prototype.activatePresetById = function (presetId, recallInProgramInt, type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('activatePreset', { id: presetId, type: recallInProgramInt, operatorId: params }, cb)
+		case 'super_user':
+			return self.query('activatePreset', { id: presetId, type: recallInProgramInt, password: params }, cb)
+		default:
+			return self.query('activatePreset', { id: presetId, type: recallInProgramInt }, cb)
+	}
 }
 /**
  * @param  {} presetSno
  * @param  {} recallInProgramInt
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.activatePresetBySno = function(presetSno, recallInProgramInt, cb) {
-	var self = this;
-	return self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt }, cb);
+eventmaster.prototype.activatePresetBySno = function (presetSno, recallInProgramInt, type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('activatePreset', { presetSno: presetSno, type: recallInProgramInt, operatorId: params }, cb)
+		case 'super_user':
+			return self.query('activatePreset', { presetSno: presetSno, type: recallInProgramInt, password: params }, cb)
+		default:
+			return self.query('activatePreset', { presetSno: presetSno, type: recallInProgramInt }, cb)
+	}
 }
 /**
  * @param  {} presetName
  * @param  {} recallInProgramInt
  * @param  {} cb
  */
-eventmaster.prototype.activatePresetByName = function(presetName, recallInProgramInt, cb) {
-	var self = this;
-	return self.query("activatePreset", { presetName: presetName, type: recallInProgramInt }, cb);
+eventmaster.prototype.activatePresetByName = function (presetName, recallInProgramInt, type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query(
+				'activatePreset',
+				{
+					presetName: presetName,
+					type: recallInProgramInt,
+					operatorId: params,
+				},
+				cb
+			)
+		case 'super_user':
+			return self.query('activatePreset', { presetName: presetName, type: recallInProgramInt, password: params }, cb)
+		default:
+			return self.query('activatePreset', { presetName: presetName, type: recallInProgramInt }, cb)
+	}
 }
-/**
- * @param  {} presetId
- * @param  {} recallInProgramInt
- * @param  {} password
- * @param  {} cb
- */
-eventmaster.prototype.activatePresetByIdSuper = function(presetId, recallInProgramInt, password, cb) {
-	var self = this;
-	return self.query("activatePreset", { id: presetId, type: recallInProgramInt, password: password }, cb);
-}
-/**
- * @param  {} presetSno
- * @param  {} recallInProgramInt
- * @param  {} password
- * @param  {} cb
- */
-eventmaster.prototype.activatePresetBySnoSuper = function(presetSno, recallInProgramInt, password, cb) {
-	var self = this;
-	return self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt, password: password }, cb);
-}
-/**
- * @param  {} presetName
- * @param  {} recallInProgramInt
- * @param  {} password
- * @param  {} cb
- */
-eventmaster.prototype.activatePresetByNameSuper = function(presetName, recallInProgramInt, password, cb) {
-	var self = this;
-	return self.query("activatePreset", { presetName: presetName, type: recallInProgramInt, password:password }, cb);
-}
-/**
- * @param  {} presetId
- * @param  {} recallInProgramInt
- * @param  {} operatorId
- * @param  {} cb
- */
-eventmaster.prototype.activatePresetByIdOperator = function(presetId, recallInProgramInt, operatorId, cb) {
-	var self = this;
-	return self.query("activatePreset", { id: presetId, type: recallInProgramInt, operatorId: operatorId }, cb);
-}
-/**
- * @param  {} presetSno
- * @param  {} recallInProgramInt
- * @param  {} operatorId
- * @param  {} cb
- */
-eventmaster.prototype.activatePresetBySnoOperator = function(presetSno, recallInProgramInt, operatorId, cb) {
-	var self = this;
-	return self.query("activatePreset", { presetSno: presetSno, type: recallInProgramInt, operatorId: operatorId }, cb);
-}
-/**
- * @param  {} presetName
- * @param  {} recallInProgramInt
- * @param  {} operatorId
- * @param  {} cb
- */
-eventmaster.prototype.activatePresetByNameOperator = function(presetName, recallInProgramInt, operatorId, cb) {
-	var self = this;
-	return self.query("activatePreset", { presetName: presetName, type: recallInProgramInt, operatorId:operatorId }, cb);
-}
-
 /**
 recallNextPreset
 •	Definition:
@@ -461,9 +453,9 @@ No parameter is required.
 
  * @param  {} cb
  */
-eventmaster.prototype.recallNextPreset = function(cb) {
-	var self = this;
-	return self.query("recallNextPreset", {}, cb);
+eventmaster.prototype.recallNextPreset = function (cb) {
+	var self = this
+	return self.query('recallNextPreset', {}, cb)
 }
 
 /**
@@ -500,27 +492,54 @@ o	password— Super user password saved. When this is passed, actions will be pe
 {"params": {"id": 5, "operatorId": 2}, "method":"deletePreset", "id":"1234", "jsonrpc":"2.0"}
 
  * @param  {} presetId
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.deletePresetById = function(presetId, cb) {
-	var self = this;
-	return self.query("deletePreset", { id: presetId }, cb);
+eventmaster.prototype.deletePresetById = function (presetId, type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('deletePreset', { id: presetId, operatorId: params }, cb)
+		case 'super_user':
+			return self.query('deletePreset', { id: presetId, password: params }, cb)
+		default:
+			return self.query('deletePreset', { id: presetId }, cb)
+	}
 }
 /**
  * @param  {} presetSno
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.deletePresetBySno = function(presetSno, cb) {
-	var self = this;
-	return self.query("deletePreset", { presetSno: presetSno }, cb);
+eventmaster.prototype.deletePresetBySno = function (presetSno, type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('deletePreset', { presetSno: presetSno, operatorId: params }, cb)
+		case 'super_user':
+			return self.query('deletePreset', { presetSno: presetSno, password: params }, cb)
+		default:
+			return self.query('deletePreset', { presetSno: presetSno }, cb)
+	}
 }
 /**
  * @param  {} presetName
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.deletePresetByName = function(presetName, cb) {
-	var self = this;
-	return self.query("deletePreset", { presetName: presetName }, cb);
+eventmaster.prototype.deletePresetByName = function (presetName, type, params, cb) {
+	var self = this
+	switch (type) {
+		case 'operator':
+			return self.query('deletePreset', { presetName: presetName, operatorId: params }, cb)
+		case 'super_user':
+			return self.query('deletePreset', { presetName: presetName, password: params }, cb)
+		default:
+			return self.query('deletePreset', { presetName: presetName }, cb)
+	}
 }
 
 /**
@@ -542,9 +561,9 @@ o	2—Only aux destinations.
  * @param  {} type
  * @param  {} cb
  */
-eventmaster.prototype.listDestinations = function(type, cb) {
-	var self = this;
-	return self.query("listDestinations", { type: type  }, cb);
+eventmaster.prototype.listDestinations = function (type, cb) {
+	var self = this
+	return self.query('listDestinations', { type: type }, cb)
 }
 
 /**
@@ -573,9 +592,9 @@ success: (0=success, anything else is an error)
  * @param  {} type
  * @param  {} cb
  */
-eventmaster.prototype.listSources = function(type, cb) {
-	var self = this;
-	return self.query("listSources", { type: type }, cb);
+eventmaster.prototype.listSources = function (type, cb) {
+	var self = this
+	return self.query('listSources', { type: type }, cb)
 }
 
 /**
@@ -595,27 +614,27 @@ activateCue
  * @param  {} type
  * @param  {} cb
  */
-eventmaster.prototype.activateCueById = function(id, type, cb) {
-	var self = this;
-	return self.query("activateCue", { id: id, type: type }, cb);
+eventmaster.prototype.activateCueById = function (id, type, cb) {
+	var self = this
+	return self.query('activateCue', { id: id, type: type }, cb)
 }
 /**
  * @param  {} cueName
  * @param  {} type
  * @param  {} cb
  */
-eventmaster.prototype.activateCueByCueName = function(cueName, type, cb) {
-	var self = this;
-	return self.query("activateCue", { cueName: cueName, type: type }, cb);
+eventmaster.prototype.activateCueByCueName = function (cueName, type, cb) {
+	var self = this
+	return self.query('activateCue', { cueName: cueName, type: type }, cb)
 }
 /**
  * @param  {} cueSerialNo
  * @param  {} type
  * @param  {} cb
  */
-eventmaster.prototype.activateCueByCueSerialNo = function(cueSerialNo, type, cb) {
-	var self = this;
-	return self.query("activateCue", { cueSerialNo: cueSerialNo, type: type }, cb);
+eventmaster.prototype.activateCueByCueSerialNo = function (cueSerialNo, type, cb) {
+	var self = this
+	return self.query('activateCue', { cueSerialNo: cueSerialNo, type: type }, cb)
 }
 
 /**
@@ -634,9 +653,9 @@ listCues
  * @param  {} type
  * @param  {} cb
  */
-eventmaster.prototype.listCues = function(type, cb) {
-	var self = this;
-	return self.query("listCues", { type: type }, cb);
+eventmaster.prototype.listCues = function (type, cb) {
+	var self = this
+	return self.query('listCues', { type: type }, cb)
 }
 
 /**
@@ -665,9 +684,9 @@ o	destGrName – Destnation group name.
  * @param  {} id
  * @param  {} cb
  */
-eventmaster.prototype.activateDestGroup = function(id, cb) {
-	var self = this;
-	return self.query("activateDestGroup", { id: id }, cb);
+eventmaster.prototype.activateDestGroup = function (id, cb) {
+	var self = this
+	return self.query('activateDestGroup', { id: id }, cb)
 }
 
 /**
@@ -693,9 +712,9 @@ o	To reset, do not provide any parameter except "id".
  * @param  {} syncInvert
  * @param  {} cb
  */
-eventmaster.prototype.control3d = function(id, type, syncSource, syncInvert, cb) {
-	var self = this;
-	return self.query("3dControl", { id: id, type: type, syncSource: syncSource, syncInvert: syncInvert }, cb);
+eventmaster.prototype.control3d = function (id, type, syncSource, syncInvert, cb) {
+	var self = this
+	return self.query('3dControl', { id: id, type: type, syncSource: syncSource, syncInvert: syncInvert }, cb)
 }
 
 /**
@@ -728,9 +747,9 @@ o	LinkDestId:  Link Destination Index
  * @param  {} id
  * @param  {} cb
  */
-eventmaster.prototype.listContent = function(id, cb) {
-	var self = this;
-	return self.query("listContent", { id: id }, cb);
+eventmaster.prototype.listContent = function (id, cb) {
+	var self = this
+	return self.query('listContent', { id: id }, cb)
 }
 
 /**
@@ -764,9 +783,9 @@ o	DestXmlId:  Link layer part of screen Destination Index.
  * @param  {} id
  * @param  {} cb
  */
-eventmaster.prototype.listSuperDestContent = function(id, cb) {
-	var self = this;
-	return self.query("listSuperDestContent", { id: id }, cb);
+eventmaster.prototype.listSuperDestContent = function (id, cb) {
+	var self = this
+	return self.query('listSuperDestContent', { id: id }, cb)
 }
 
 /**
@@ -795,9 +814,9 @@ o	AuxDestCollection —Array of aux destination with index and name of aux desti
  * @param  {} id
  * @param  {} cb
  */
-eventmaster.prototype.listSuperAuxContent = function(id, cb) {
-	var self = this;
-	return self.query("listSuperAuxContent", { id: id }, cb);
+eventmaster.prototype.listSuperAuxContent = function (id, cb) {
+	var self = this
+	return self.query('listSuperAuxContent', { id: id }, cb)
 }
 
 /**
@@ -829,9 +848,9 @@ o	TestPattern – Provide test pattern id
  * @param  {} Layers
  * @param  {} cb
  */
-eventmaster.prototype.changeContent = function(screenDestIndex, bgLayer, Layers, cb) {
-	var self = this;
-	return self.query("changeContent", { id: screenDestIndex, BGLyr: bgLayer, Layers: Layers }, cb);
+eventmaster.prototype.changeContent = function (screenDestIndex, bgLayer, Layers, cb) {
+	var self = this
+	return self.query('changeContent', { id: screenDestIndex, BGLyr: bgLayer, Layers: Layers }, cb)
 }
 
 /*
@@ -891,9 +910,9 @@ o	3—AuxDestination.
  * @param  {} mode
  * @param  {} cb
  */
-eventmaster.prototype.freezeDestSource = function(type, id, screenGroup, mode, cb) {
-	var self = this;
-	return self.query("freezeDestSource", { type: type, id: id, screengroup: screenGroup, mode: mode }, cb);
+eventmaster.prototype.freezeDestSource = function (type, id, screenGroup, mode, cb) {
+	var self = this
+	return self.query('freezeDestSource', { type: type, id: id, screengroup: screenGroup, mode: mode }, cb)
 }
 
 /**
@@ -917,9 +936,9 @@ o	FileSize—Size of the file created in KBs.
 
  * @param  {} cb
  */
-eventmaster.prototype.listStill = function(cb) {
-	var self = this;
-	return self.query("listStill", {}, cb);
+eventmaster.prototype.listStill = function (cb) {
+	var self = this
+	return self.query('listStill', {}, cb)
 }
 
 /**
@@ -938,9 +957,9 @@ o	id—Index of still.
  * @param  {} stillIndex
  * @param  {} cb
  */
-eventmaster.prototype.deleteStill = function(stillIndex,cb) {
-	var self = this;
-	return self.query("deleteStill", { id:stillIndex }, cb);
+eventmaster.prototype.deleteStill = function (stillIndex, cb) {
+	var self = this
+	return self.query('deleteStill', { id: stillIndex }, cb)
 }
 
 /**
@@ -964,9 +983,9 @@ o	This creates a still from input source id 1 as StillStore6.
  * @param  {} fileid
  * @param  {} cb
  */
-eventmaster.prototype.takeStill = function(type, id, fileid, cb) {
-	var self = this;
-	return self.query("takeStill", { type: type, id: id, file: fileid }, cb);
+eventmaster.prototype.takeStill = function (type, id, fileid, cb) {
+	var self = this
+	return self.query('takeStill', { type: type, id: id, file: fileid }, cb)
 }
 
 /**
@@ -996,9 +1015,9 @@ o	Slot—List of Input/Output/Expansion card information.
 
  * @param  {} cb
  */
-eventmaster.prototype.getFrameSettings = function(cb) {
-	var self = this;
-	return self.query("getFrameSettings", {}, cb);
+eventmaster.prototype.getFrameSettings = function (cb) {
+	var self = this
+	return self.query('getFrameSettings', {}, cb)
 }
 
 /**
@@ -1021,9 +1040,9 @@ o	PgmLastSrcIndex—Input/Background source index in the program area.
  * @param  {} auxDestIndex
  * @param  {} cb
  */
-eventmaster.prototype.listAuxContent = function(auxDestIndex, cb) {
-	var self = this;
-	return self.query("listAuxContent", { id: auxDestIndex }, cb);
+eventmaster.prototype.listAuxContent = function (auxDestIndex, cb) {
+	var self = this
+	return self.query('listAuxContent', { id: auxDestIndex }, cb)
 }
 
 /**
@@ -1051,9 +1070,17 @@ o	TestPattern – Provide test pattern id
  * @param  {} pgmLastSrcIndex
  * @param  {} cb
  */
-eventmaster.prototype.changeAuxContent = function(id, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
-	var self = this;
-	return self.query("changeAuxContent", { id: id, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+eventmaster.prototype.changeAuxContent = function (id, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+	var self = this
+	return self.query(
+		'changeAuxContent',
+		{
+			id: id,
+			PvwLastSrcIndex: pvwLastSrcIndex,
+			PgmLastSrcIndex: pgmLastSrcIndex,
+		},
+		cb
+	)
 }
 /**
  * @param  {} id
@@ -1062,9 +1089,18 @@ eventmaster.prototype.changeAuxContent = function(id, pvwLastSrcIndex, pgmLastSr
  * @param  {} pgmLastSrcIndex
  * @param  {} cb
  */
-eventmaster.prototype.changeAuxContentName = function(id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
-	var self = this;
-	return self.query("changeAuxContent", { id: id, name: name, PvwLastSrcIndex: pvwLastSrcIndex, PgmLastSrcIndex: pgmLastSrcIndex }, cb);
+eventmaster.prototype.changeAuxContentName = function (id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb) {
+	var self = this
+	return self.query(
+		'changeAuxContent',
+		{
+			id: id,
+			name: name,
+			PvwLastSrcIndex: pvwLastSrcIndex,
+			PgmLastSrcIndex: pgmLastSrcIndex,
+		},
+		cb
+	)
 }
 
 /**
@@ -1106,9 +1142,9 @@ o	notificationTypes—an array of notifications to which a user wants to subscri
  * @param  {} notificationTypes
  * @param  {} cb
  */
-eventmaster.prototype.subscribe = function(hostname, port, notificationTypes, cb) {
-	var self = this;
-	return self.query("subscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
+eventmaster.prototype.subscribe = function (hostname, port, notificationTypes, cb) {
+	var self = this
+	return self.query('subscribe', { hostname: hostname, port: port, notification: notificationTypes }, cb)
 }
 
 /**
@@ -1142,9 +1178,9 @@ o	notificationTypes—an array of notifications to which a user wants to subscri
  * @param  {} notificationTypes
  * @param  {} cb
  */
-eventmaster.prototype.unsubscribe = function(hostname, port, notificationTypes, cb) {
-	var self = this;
-	return self.query("unsubscribe", { hostname: hostname, port: port, notification: notificationTypes }, cb);
+eventmaster.prototype.unsubscribe = function (hostname, port, notificationTypes, cb) {
+	var self = this
+	return self.query('unsubscribe', { hostname: hostname, port: port, notification: notificationTypes }, cb)
 }
 
 /**
@@ -1185,9 +1221,17 @@ o	AuxDestinations—AuxDest ids to arm/unarm.
  * @param  {} auxDestinations
  * @param  {} cb
  */
-eventmaster.prototype.armUnarmDestination = function(arm, screenDestinations, auxDestinations, cb) {
-	var self = this;
-	return self.query("armUnarmDestination", { arm: arm , ScreenDestination: screenDestinations, AuxDestination: auxDestinations}, cb);
+eventmaster.prototype.armUnarmDestination = function (arm, screenDestinations, auxDestinations, cb) {
+	var self = this
+	return self.query(
+		'armUnarmDestination',
+		{
+			arm: arm,
+			ScreenDestination: screenDestinations,
+			AuxDestination: auxDestinations,
+		},
+		cb
+	)
 }
 /**
 fillHV
@@ -1203,7 +1247,15 @@ o	Layers — Array of layer indexes.
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params": {"screenId": 0, "Layers": [{"id": 0}, {"id": 1}]}, "method":"fillHV", "id":"1234", "jsonrpc":"2.0"}
+*
+* @param  {} screenId
+* @param  {} Layers
+* @param  {} cb
 */
+eventmaster.prototype.fillHV = function (screenId, Layers, cb) {
+	var self = this
+	return self.query('fillHV', { screenId: screenId, Layers: Layers }, cb)
+}
 
 /**
 clearLayers
@@ -1219,8 +1271,15 @@ o	Layers — Array of layer indexes.
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params": {"screenId": 0, "Layers": [{"id": 0}, {"id": 1}]}, "method":"clearLayers", "id":"1234", "jsonrpc":"2.0"}
+*
+* @param  {} screenId
+* @param  {} Layers
+* @param  {} cb
 */
-
+eventmaster.prototype.clearLayers = function (screenId, Layers, cb) {
+	var self = this
+	return self.query('clearLayers', { screenId: screenId, Layers: Layers }, cb)
+}
 
 /**
 recallUserKey
@@ -1239,8 +1298,24 @@ o	 Layer – Array of layers index in screen destination on which UserKey is to 
 •	Example:
 –	{"params": {"id": 0, "ScreenDestination": [0,1,2], "Layer":[0,2,4]}, "method":"recallUserKey", "id":"1234", "jsonrpc":"2.0"} //Recall with id 0.
 –	{"params": {"userkeyName": "abc", "ScreenDestination": [0,1], "Layer":[0]}, "method":"recallUserKey", "id":"1234", "jsonrpc":"2.0"} //Recall userkey name “abc”. 
+*
+* @param  {} userkeyName
+* @param  {} ScreenDestination
+* @param  {} Layer
+* @param  {} cb
 */
-
+eventmaster.prototype.recallUserKey = function (userkeyName, ScreenDestination, Layer, cb) {
+	var self = this
+	return self.query(
+		'recallUserKey',
+		{
+			userkeyName: userkeyName,
+			ScreenDestination: ScreenDestination,
+			Layer: Layer,
+		},
+		cb
+	)
+}
 
 /**
 listUserKey
@@ -1254,8 +1329,13 @@ listUserKey
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params": {}, "method":"listUserKeys", "id":"1234", "jsonrpc":"2.0"}
+*
+* @param  {} cb
 */
-
+eventmaster.prototype.listUserKeys = function (cb) {
+	var self = this
+	return self.query('listUserKeys', {}, cb)
+}
 
 /**
 listSourceMainBackup
@@ -1285,7 +1365,14 @@ o	Name: Name of source configured as backup.
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params":{"inputType": -1}, "method":"listSourceMainBackup", "id":"1234", "jsonrpc":"2.0"}
+*
+* @param  {} inputType
+* @param  {} cb
 */
+eventmaster.prototype.listSourceMainBackup = function (inputType, cb) {
+	var self = this
+	return self.query('listSourceMainBackup', { inputType: inputType }, cb)
+}
 
 /**
 activateSourceMainBackup
@@ -1309,7 +1396,7 @@ o	BackupState: Backup id which needs to be set for backup of the main input. -1 
 "Backup1": {"SrcType": 1, "SourceId": 1},
 "Backup2": {"SrcType": 0, "SourceId": 0},			"Backup3": {"SrcType": 1, "SourceId": 0},
 "BackUpState":1}, "method":"activateSourceMainBackup", "id":"1234", "jsonrpc":"2.0"}
-*/ 
+*/
 
 /**
 resetSourceMainBackup
@@ -1324,7 +1411,14 @@ o	id: Source index to be reset.
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params": {"id": 22}, "method":"resetSourceMainBackup", "id":"1234", "jsonrpc":"2.0"}
+*
+* @param  {} source
+* @param  {} cb
 */
+eventmaster.prototype.resetSourceMainBackup = function (source, cb) {
+	var self = this
+	return self.query('resetSourceMainBackup', { id: source }, cb)
+}
 
 /**
 listInputs
@@ -1341,7 +1435,14 @@ o	Response contains the array of inputs. Above response contains id, name, Sync 
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params":{"inputId": 1}, "method":"listInputs", "id":"1234", "jsonrpc":"2.0"}
+*
+* @param  {} index
+* @param  {} cb
 */
+eventmaster.prototype.listInputs = function (index, cb) {
+	var self = this
+	return self.query('listInputs', { inputId: index }, cb)
+}
 
 /**
 listOutputs
@@ -1358,7 +1459,15 @@ o	Response contains the array of outputs. Above response contains id, name, Form
 –	success: (0=success, anything else is an error)
 •	Example:
 –	{"params":{"outputCfgId": 1}, "method":"listOutputs", "id":"1234", "jsonrpc":"2.0"}
+*
+
+* @param  {} index
+* @param  {} cb
 */
+eventmaster.prototype.listOutputs = function (index, cb) {
+	var self = this
+	return self.query('listOutputs', { outputCfgId: index }, cb)
+}
 
 /**
 mvrLayoutChange
@@ -1382,8 +1491,8 @@ o	Both are mandatory parameters for this API.
  * @param  {} cb
  */
 eventmaster.prototype.mvrLayoutChange = function (frameUnitId, mvrLayoutId, cb) {
-	var self = this;
-	return self.query("mvrLayoutChange", {frameUnitId: frameUnitId, mvrLayoutId: mvrLayoutId}, cb);
+	var self = this
+	return self.query('mvrLayoutChange', { frameUnitId: frameUnitId, mvrLayoutId: mvrLayoutId }, cb)
 }
 
 /**
@@ -1402,8 +1511,8 @@ o	Response contains the array of multioperators. Above response contains id, nam
  * @param {*} cb 
  */
 eventmaster.prototype.listOperators = function (cb) {
-	var self = this;
-	return self.query("listOperators", {}, cb)
+	var self = this
+	return self.query('listOperators', {}, cb)
 }
 
 /**
@@ -1431,15 +1540,18 @@ o	destIndex: destination index.
 –	{"params": {"operatorId": 1, "name": "operator1", "endRange":34}, "method":"configureOperator", "id":"1234", "jsonrpc":"2.0"}
 –	{"params": {"operatorId": 1, "name": "operator1", "startRange":89}, "method":"configureOperator", "id":"1234", "jsonrpc":"2.0"}
 
- * @param {*} operatorId 
- * @param {*} enable 
+ * @param {*} params 
  * @param {*} cb 
  */
-eventmaster.prototype.configureOperator = function(operatorId, enable, cb) {
-	var self = this;
-	return self.query("configureOperator", {operatorId: operatorId, enable: enable }, cb);
+eventmaster.prototype.configureOperator = function (params, cb) {
+	var self = this
+	try {
+		JSON.parse(params)
+		return self.query('configureOperator', JSON.parse(params), cb)
+	} catch (error) {
+		return error
+	}
 }
-
 
 /** NOT DOCUMENTED BY BARCO **/
 
@@ -1454,35 +1566,35 @@ Example:
 params:{"id":0, "TestPattern" :3 },
 "method":"changeAuxContent", "id":"1234", "jsonrpc":"2.0"}
 */
-eventmaster.prototype.changeAuxContentTestPattern = function(id, testPattern, cb) {
-	var self = this;
-	return self.query("changeAuxContent", { id: id, TestPattern: testPattern }, cb);
+eventmaster.prototype.changeAuxContentTestPattern = function (id, testPattern, cb) {
+	var self = this
+	return self.query('changeAuxContent', { id: id, TestPattern: testPattern }, cb)
 }
-eventmaster.prototype.changeContentTestPattern = function(id, testPattern, cb) {
-	var self = this;
-	return self.query("changeContent", { id: id, TestPattern: testPattern }, cb);
+eventmaster.prototype.changeContentTestPattern = function (id, testPattern, cb) {
+	var self = this
+	return self.query('changeContent', { id: id, TestPattern: testPattern }, cb)
 }
 
 /**
- * "listDestGroups" to return a list of all Destination Groups group names and IDs including all member destination names and IDs.   
- * Example to return all Destination Groups: {"params": {}, "method":"listDestGroups", "id":"1234", "jsonrpc":"2.0"} 
- * @param {*} cb 
+ * "listDestGroups" to return a list of all Destination Groups group names and IDs including all member destination names and IDs.
+ * Example to return all Destination Groups: {"params": {}, "method":"listDestGroups", "id":"1234", "jsonrpc":"2.0"}
+ * @param {*} cb
  */
-eventmaster.prototype.listDestGroups = function(cb) {
-	var self = this;
-	return self. query("listDestGroups", {}, cb);
+eventmaster.prototype.listDestGroups = function (cb) {
+	var self = this
+	return self.query('listDestGroups', {}, cb)
 }
 
 /**
- * "listDestGroups" to return a list of all Destination Groups group names and IDs including all member destination names and IDs.   
- * An additional parameter ("destGroupId", "destGroupSno", "destGroupName") may be added to return only the names and IDs of a particular Destination Group 
- * Example to return all Destination Groups: {"params": {destGroupId}, "method":"listDestGroups", "id":"1234", "jsonrpc":"2.0"} 
+ * "listDestGroups" to return a list of all Destination Groups group names and IDs including all member destination names and IDs.
+ * An additional parameter ("destGroupId", "destGroupSno", "destGroupName") may be added to return only the names and IDs of a particular Destination Group
+ * Example to return all Destination Groups: {"params": {destGroupId}, "method":"listDestGroups", "id":"1234", "jsonrpc":"2.0"}
  * @param {*} type (destGroupId, destGroupSno, destGroupName)
- * @param {*} cb 
+ * @param {*} cb
  */
-eventmaster.prototype.listDestGroupsPerType = function(type, cb) {
-	var self = this;
-	return self. query("listDestGroups", {type}, cb);
+eventmaster.prototype.listDestGroupsPerType = function (type, cb) {
+	var self = this
+	return self.query('listDestGroups', { type }, cb)
 }
 
-exports = module.exports = eventmaster;
+exports = module.exports = eventmaster
