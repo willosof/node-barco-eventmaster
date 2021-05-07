@@ -176,6 +176,52 @@ All the API calls is also in comments in the module source code over each functi
 
  – Ability to arm / unarm Destination
 
+## Functions supported from version 8.2.0
+
+`fillHV(screenId, Layers, cb)`
+
+–	Fits layers to screen destination horizontally and vertically.
+
+`clearLayers(screenId, Layers, cb)`
+
+–	Clear layers from screen destinations only for custom mode.
+
+`recallUserKey(userkeyName, ScreenDestination, Layer, cb)`
+
+–	Recall a UserKey on the Event Master processor. User can recall UserKey with UserKey name.
+
+`listUserKeys(cb)`
+
+–	This API lists all userkeys in the system.
+
+`listSourceMainBackup(inputType, cb)`
+
+–	This API shows list of inputs and backgrounds which has backup configured.
+
+`resetSourceMainBackup(source, cb)`
+
+–	This API reset the applied source backup to primary.
+
+`listInputs(index, cb)`
+
+–	This queries the list of inputs configured.
+
+`listOutputs(index, cb)`
+
+–	This queries the list of outputs configured.
+
+`mvrLayoutChange(frameUnitId, mvrLayoutId, cb)`
+
+- This API changes layout in the given frame multiviewer.
+
+`listOperators(cb)`
+
+- This queries the list of outputs configured.
+
+`configureOperator(params, cb)`
+
+- This API helps user to configure operator.
+
 ## Author
 William Viker
 <william.viker@gmail.com>

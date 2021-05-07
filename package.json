@@ -12,7 +12,7 @@
     "url": "git+https://github.com/willosof/node-barco-eventmaster.git"
   },
   "author": "William Viker <william.viker@gmail.com>",
-	"contributors": ["Jeffrey Davidsz <jeffrey.davidsz@vicreo.eu>"],
+  "contributors": ["Jeffrey Davidsz <jeffrey.davidsz@vicreo.eu>"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/willosof/node-barco-eventmaster/issues"
