@@ -284,19 +284,53 @@ Kindly note that 1.1 and 1.10 or 1.00 and 1 are same.
  * @param  {} presetName
  * @param  {} ScreenDestinationsArray
  * @param  {} AuxDestinationsArray
+ * @param  {} type
+ * @param  {} params
  * @param  {} cb
  */
-eventmaster.prototype.savePreset = function (presetName, ScreenDestinationsArray, AuxDestinationsArray, cb) {
+eventmaster.prototype.savePreset = function (
+	presetName,
+	ScreenDestinationsArray,
+	AuxDestinationsArray,
+	type,
+	params,
+	cb
+) {
 	var self = this
-	return self.query(
-		'savePreset',
-		{
-			presetName: presetName,
-			ScreenDestination: ScreenDestinationsArray,
-			AuxDestination: AuxDestinationsArray,
-		},
-		cb
-	)
+	switch (type) {
+		case 'operator':
+			return self.query(
+				'savePreset',
+				{
+					presetName: presetName,
+					ScreenDestination: ScreenDestinationsArray,
+					AuxDestination: AuxDestinationsArray,
+					operatorId: params,
+				},
+				cb
+			)
+		case 'super_user':
+			return self.query(
+				'savePreset',
+				{
+					presetName: presetName,
+					ScreenDestination: ScreenDestinationsArray,
+					AuxDestination: AuxDestinationsArray,
+					password: params,
+				},
+				cb
+			)
+		default:
+			return self.query(
+				'savePreset',
+				{
+					presetName: presetName,
+					ScreenDestination: ScreenDestinationsArray,
+					AuxDestination: AuxDestinationsArray,
+				},
+				cb
+			)
+	}
 }
 
 /**
