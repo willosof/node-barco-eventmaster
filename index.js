@@ -689,6 +689,7 @@ listCues
  */
 eventmaster.prototype.listCues = function (type, cb) {
 	var self = this
+	if (type == null) type = 0
 	return self.query('listCues', { type: type }, cb)
 }
 
