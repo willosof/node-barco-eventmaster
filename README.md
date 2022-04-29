@@ -222,6 +222,10 @@ All the API calls is also in comments in the module source code over each functi
 
 - This API helps user to configure operator.
 
+`activateSourceMainBackup(params, cb)`
+
+- This API configures the Backup options for a source
+
 ## Author
 William Viker
 <william.viker@gmail.com>

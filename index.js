@@ -377,6 +377,41 @@ eventmaster.prototype.renamePresetByName = function (presetName, newPresetName, 
 	var self = this
 	return self.query('renamePreset', { presetName: presetName, newPresetName: newPresetName }, cb)
 }
+/**
+activateSourceMainBackup 
+• Definition: – This API configure backups on inputs and backgrounds. 
+• Request params: {"inputId":8, "Backup1": {"SrcType": 1, "SourceId": 1}, "Backup2": {"SrcType": 0, "SourceId": 0}, "Backup3": {"SrcType": 1, "SourceId": 0}, "BackUpState":1} 
+o inputId: index of input/Background for which backup needs to be configured. 
+o Backup1/Backup2/Backup3: 
+o SrcType: 0 for input, 1 for Stills. 
+o SourceId: Index of input/background or Still. 
+o BackupState: Backup id which needs to be set for backup of the main input. -1 to set primary and is default (If not provided then primary will be activated) 
+• Response: – response: null – success: (0=success, anything else is an error) 
+• Example: – {"params":{"inputId":8, "Backup1": {"SrcType": 1, "SourceId": 1}, "Backup2": {"SrcType": 0, "SourceId": 0}, "Backup3": {"SrcType": 1, "SourceId": 0}, "BackUpState":1}, "method":"activateSourceMainBackup", "id":"1234", "jsonrpc":"2.0"}
+*/
+eventmaster.prototype.activateSourceMainBackup = function (
+	inputId,
+	Backup1_SrcType,
+	Backup1_SourceId,
+	Backup2_SrcType,
+	Backup2_SourceId,
+	Backup3_SrcType,
+	Backup3_SourceId,
+	BackUpState
+) {
+	var self = this
+	return self.query(
+		'activateSourceMainBackup',
+		{
+			inputId: inputId,
+			Backup1: { SrcType: Backup1_SrcType, SourceId: Backup1_SourceId },
+			Backup2: { SrcType: Backup2_SrcType, SourceId: Backup2_SourceId },
+			Backup3: { SrcType: Backup3_SrcType, SourceId: Backup3_SourceId },
+			BackUpState: BackUpState,
+		},
+		cb
+	)
+}
 
 /**
 activatePreset
