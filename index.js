@@ -397,7 +397,8 @@ eventmaster.prototype.activateSourceMainBackup = function (
 	Backup2_SourceId,
 	Backup3_SrcType,
 	Backup3_SourceId,
-	BackUpState
+	BackUpState,
+	cb
 ) {
 	var self = this
 	return self.query(
