@@ -1,107 +1,118 @@
-
 # Barco EventMaster REST API
 Node.js wrapper module for Barco EventMaster REST API.
 
 ***IMPORTANT!** NOT ALL CALLS HAVE BEEN PROPERLY TESTED YET. USE AT OWN RISK. Everything should be pretty straight forward and working, though. Jinx.*
 
 ## Installation and usage example
+
 **Installation**
 ```
 npm install barco-eventmaster
 ```
-**Example**
-```
-var EventMaster = require('barco-eventmaster');
 
-// Change this ip to your own E2/S3 IP
-var em = new EventMaster('10.0.0.1');
+**Example**
+```js
+const EventMaster = require('barco-eventmaster');
+
+// Change this IP to your own E2/S3 IP
+const em = new EventMaster('10.0.0.1');
 
 // Get all preset names
-em.listPresets(-1, -1, (err, presets) => {
-	if (err !== null) {
-		console.log("Current presets");
-		console.log(presets);
-	}
-	else {
-		console.log(err);
-		throw "Something went wrong with the event master request";
-	}
+em.listPresets((err, presets) => {
+  if (err) {
+    console.error("Something went wrong with the event master request", err);
+    return;
+  }
+  console.log("Current presets:", presets);
 });
-
-return self;
 ```
+
 ## Available API calls
-Some of the calls have slightly modified variable names going into the function than the ones specified in the documentation to help out the editors with autocompletion/hints. Some of the API calls will also need further looking into documentation on formatting, due to their complexity, it would gain noone to implement this into this module.
 
-All the API calls is also in comments in the module source code over each function declaration.
+All API calls are documented with JSDoc comments in the module source code. Most methods follow the pattern:  
+`em.methodName(params..., callback)`  
+where `params` are the required parameters for the API call, and `callback` is a function `(err, result)`.
 
-```
-query(method, params, cb)
-allTrans(type, params, cb)
-cut(type, params, cb)
-resetFrameSettings(resetKind, cb)
-powerStatus(cb)
-listPresets(ScreenDest, AuxDest, cb)
-listDestinationsForPreset(presetId)
-savePreset(
-renamePresetById(presetId, newPresetName, cb)
-renamePresetBySno(presetSno, newPresetName, cb)
-renamePresetByName(presetName, newPresetName, cb)
-activateSourceMainBackup(
-activatePresetById(presetId, recallInProgramInt, type, params, cb)
-activatePresetBySno(presetSno, recallInProgramInt, type, params, cb)
-activatePresetByName(presetName, recallInProgramInt, type, params, cb)
-recallNextPreset(cb)
-deletePresetById(presetId, type, params, cb)
-deletePresetBySno(presetSno, type, params, cb)
-deletePresetByName(presetName, type, params, cb)
-listDestinations(type, cb)
-listSources(type, cb)
-activateCueById(id, type, cb)
-activateCueByCueName(cueName, type, cb)
-activateCueByCueSerialNo(cueSerialNo, type, cb)
-listCues(type, cb)
-activateDestGroup(id, cb)
-control3d(id, type, syncSource, syncInvert, cb)
-listContent(id, cb)
-listSuperDestContent(id, cb)
-listSuperAuxContent(id, cb)
-changeContent(screenDestIndex, bgLayer, Layers, cb)
-freezeDestSource(type, id, screenGroup, mode, cb)
-listStill(cb)
-deleteStill(stillIndex, cb)
-takeStill(type, id, fileid, cb)
-getFrameSettings(cb)
-listAuxContent(auxDestIndex, cb)
-changeAuxContent(id, pvwLastSrcIndex, pgmLastSrcIndex, cb)
-changeAuxContentName(id, name, pvwLastSrcIndex, pgmLastSrcIndex, cb)
-subscribe(hostname, port, notificationTypes, cb)
-unsubscribe(hostname, port, notificationTypes, cb)
-armUnarmDestination(arm, screenDestinations, auxDestinations, cb)
-fillHV(screenId, Layers, cb)
-clearLayers(screenId, Layers, cb)
-recallUserKey(userkeyName, ScreenDestination, Layer, cb)
-listUserKeys(cb)
-listSourceMainBackup(inputType, cb)
-resetSourceMainBackup(source, cb)
-listInputs(index, cb)
-listOutputs(index, cb)
-mvrLayoutChange(frameUnitId, mvrLayoutId, cb)
-listOperators(cb)
-configureOperator(params, cb)
-changeAuxContentTestPattern(id, testPattern, cb)
-changeContentTestPattern(id, testPattern, cb)
-listDestGroups(cb)
-listDestGroupsPerType(type, cb)
-```
+### Presets
+- `listPresets(cb)`  
+- `savePreset(params, cb)`  
+- `renamePreset(params, cb)`  
+- `deletePreset(params, cb)`  
+- `activatePreset(params, cb)`  
+- `recallNextPreset(cb)`  
+- `listDestinationsForPreset(id, cb)`
+
+### Sources, Destinations, and Layers
+- `listSources(cb)`  
+- `listDestinations(cb)`  
+- `listInputs(inputId, cb)`  
+- `listOutputs(outputCfgId, cb)`  
+- `fillHV(screenId, Layers, cb)`  
+- `clearLayers(screenId, Layers, cb)`  
+- `freezeDestSource(params, cb)`  
+
+### Cues
+- `listCues(cb)`  
+- `recallCue(id, cb)`  
+- `storeCue(id, cb)`  
+- `deleteCue(id, cb)`  
+- `takeCue(cb)`  
+- `activateCue(params, cb)`
+
+### User Keys
+- `listUserKeys(cb)`  
+- `recallUserKey(params, cb)`  
+- `storeUserKey(name, cb)`  
+- `deleteUserKey(id, cb)`
+
+### Operators
+- `listOperators(cb)`  
+- `configureOperator(params, cb)`
+
+### Stills
+- `listStill(cb)`  
+- `takeStill(params, cb)`  
+- `deleteStill(id, cb)`
+
+### Backups
+- `listSourceMainBackup(inputType, cb)`  
+- `activateSourceMainBackup(params, cb)`  
+- `resetSourceMainBackup(id, cb)`
+
+### Aux and Content
+- `listAuxContent(id, cb)`  
+- `changeAuxContent(params, cb)`  
+- `listContent(id, cb)`  
+- `changeContent(params, cb)`
+
+### Power and Frame
+- `powerStatus(cb)`  
+- `resetFrameSettings(resetType, saveOptions, cb)`
+
+### Groups and Transitions
+- `activateDestGroup(params, cb)`  
+- `armUnarmDestination(params, cb)`  
+- `allTrans(cb)`  
+- `cut(cb)`
+
+### MVR (MultiViewer)
+- `listMvrPreset(id, cb)`  
+- `activateMvrPreset(id, cb)`  
+- `mvrLayoutChange(params, cb)`
+
+---
+
+**Note:**  
+- All methods use a callback as the last argument: `(err, result)`.
+- For complex parameter objects, see the JSDoc comments in the source code for details and examples.
 
 ## Author
-William Viker
+William Viker  
 <william.viker@gmail.com>
 
 ## Contributors
-Jeffrey Davidsz
+Jeffrey Davidsz  
 <jeffrey.davidsz@vicreo.eu>
 
 ## Bugs or wishes
-Please file a ticket or pull request in github if you find something that should be better. And, well, if something isn't working properly.
+Please file a ticket or pull request in GitHub if you find something that should be better or isn't working properly.
