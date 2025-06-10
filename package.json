@@ -28,6 +28,5 @@
   "homepage": "https://github.com/willosof/node-barco-eventmaster#readme",
   "dependencies": {
     "axios": "^1.9.0",
-    "node-rest-client": "^3.1.0"
   }
 }
