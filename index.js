@@ -16,12 +16,12 @@ class EventMaster {
 	postJsonRpc(method, params, callback) {
 		const payload = {
 			jsonrpc: '2.0',
-			id: ++this.id,
+			id: '0',
 			method,
 			params,
 		}
-
-		const url = `http://${this.host}/json-rpc`
+		// console.log(`Sending JSON-RPC request: ${JSON.stringify(payload)}`)
+		const url = `http://${this.host}:9999/jsonrpc`
 		axios
 			.post(url, payload)
 			.then((res) => {
@@ -56,8 +56,17 @@ class EventMaster {
 	 * List all presets.
 	 * @param {Function} cb - Callback function (err, result).
 	 */
-	listPresets(cb) {
-		this.postJsonRpc('listPresets', {}, cb)
+	getFrameSettings(params, cb) {
+		this.postJsonRpc('getFrameSettings', params, cb)
+	}
+
+	/**
+	 * List all presets.
+	 * @param {Function} cb - Callback function (err, result).
+	 */
+	listPresets(screen, aux, cb) {
+		const params = { ScreenDest: screen ?? -1, AuxDest: aux ?? -1 }
+		this.postJsonRpc('listPresets', params, cb)
 	}
 
 	/**
@@ -68,9 +77,8 @@ class EventMaster {
 	 * @param {string|number} value - Operator ID or password.
 	 * @param {Function} cb - Callback function (err, result).
 	 */
-	activatePresetById(id, mode, type, value, cb) {
-		const params = this.withOperatorParams({ id, mode }, type, value)
-		this.postJsonRpc('activatePresetById', params, cb)
+	activatePresetById(params, cb) {
+		this.postJsonRpc('activatePreset', params, cb)
 	}
 
 	/**
@@ -126,18 +134,20 @@ class EventMaster {
 
 	/**
 	 * List all destinations.
+	 * @param {string} type - Type of destinations to list.
+	 * Can be:
+	 * 0: is the default value for the type parameter.
+	 * 1: Only screen destinations.
+	 * 2: Only aux destinations.
 	 * @param {Function} cb - Callback function (err, result).
 	 */
-	listDestinations(cb) {
-		this.postJsonRpc('listDestinations', {}, cb)
-	}
-
-	/**
-	 * List all cues.
-	 * @param {Function} cb - Callback function (err, result).
-	 */
-	listCues(cb) {
-		this.postJsonRpc('listCues', {}, cb)
+	listDestinations(type, cb) {
+		// If type is not provided, default to all destinations
+		if (typeof type === null) {
+			console.warn('listDestinations: type is null, defaulting to 0 (all types)')
+			type = 0 // -1 indicates all types
+		}
+		this.postJsonRpc('listDestinations', { type }, cb)
 	}
 
 	/**
@@ -193,15 +203,6 @@ class EventMaster {
 	}
 
 	/**
-	 * Freeze or unfreeze output.
-	 * @param {boolean} freeze - Freeze state.
-	 * @param {Function} cb - Callback function (err, result).
-	 */
-	setFreeze(freeze, cb) {
-		this.postJsonRpc('setFreeze', { freeze }, cb)
-	}
-
-	/**
 	 * Set logo by ID.
 	 * @param {number} id - Logo ID.
 	 * @param {Function} cb - Callback function (err, result).
@@ -225,8 +226,8 @@ class EventMaster {
 	 * Requires operatorId or password if multi-operator mode is enabled.
 	 * @param {Function} cb - Callback function (err, result).
 	 */
-	cut(cb) {
-		this.postJsonRpc('cut', {}, cb)
+	cut(params, cb) {
+		this.postJsonRpc('cut', params, cb)
 	}
 
 	/**
@@ -234,8 +235,8 @@ class EventMaster {
 	 * Requires operatorId or password if multi-operator mode is enabled.
 	 * @param {Function} cb - Callback function (err, result).
 	 */
-	allTrans(cb) {
-		this.postJsonRpc('allTrans', {}, cb)
+	allTrans(params, cb) {
+		this.postJsonRpc('allTrans', params, cb)
 	}
 
 	/**
@@ -400,14 +401,6 @@ class EventMaster {
 	}
 
 	/**
-	 * List all user keys.
-	 * @param {Function} cb
-	 */
-	listUserKeys(cb) {
-		this.postJsonRpc('listUserKeys', {}, cb)
-	}
-
-	/**
 	 * Recall a user key by id or name.
 	 * @param {object} params
 	 * @param {Function} cb
@@ -452,15 +445,6 @@ class EventMaster {
 	 */
 	clearLayers(screenId, Layers, cb) {
 		this.postJsonRpc('clearLayers', { screenId, Layers }, cb)
-	}
-
-	/**
-	 * List presets, optionally for a specific destination.
-	 * @param {object} params
-	 * @param {Function} cb
-	 */
-	listPresets(params, cb) {
-		this.postJsonRpc('listPresets', params || {}, cb)
 	}
 
 	/**
@@ -520,7 +504,7 @@ class EventMaster {
 	}
 
 	/**
-	 * Freeze or unfreeze sources.
+	 * Freeze or unfreeze sources, Screens, Aux.
 	 * @param {object} params
 	 * @param {Function} cb
 	 */
