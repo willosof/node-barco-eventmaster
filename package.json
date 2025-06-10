@@ -1,6 +1,6 @@
 {
   "name": "barco-eventmaster",
-  "version": "9.0.2",
+  "version": "9.0.3",
   "description": "Barco EventMaster JSON REST API wrapper",
   "main": "index.js",
   "keywords": [
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/willosof/node-barco-eventmaster#readme",
   "dependencies": {
+    "axios": "^1.9.0",
     "node-rest-client": "^3.1.0"
   }
 }
