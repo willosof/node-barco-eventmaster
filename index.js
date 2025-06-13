@@ -1,5 +1,6 @@
 // EventMaster API wrapper for Encore 3
 const axios = require('axios')
+const express = require('express')
 
 class EventMaster {
 	constructor(host) {
@@ -53,6 +54,35 @@ class EventMaster {
 	}
 
 	/**
+     * Start an Express server to receive EventMaster notifications.
+     * @param {number} port - Port to listen on.
+     * @param {Function} onNotification - Handler for incoming notifications.
+     */
+    startNotificationServer(port, onNotification) {
+        const app = express()
+        app.use(express.json())
+
+        app.post('/', (req, res) => {
+            // if (typeof onNotification === 'function') {
+                onNotification(req.body)
+            // }
+            res.status(200).send('OK')
+        })
+
+        this.notificationServer = app.listen(port, () => {
+            console.log(`EventMaster notification server listening on port ${port}`)
+        })
+    }
+	stopNotificationServer() {
+		if (this.notificationServer) {
+			this.notificationServer.close(() => {
+				console.log('Notification server stopped')
+			})
+			this.notificationServer = null
+		}
+	}
+	
+	/**
 	 * List all presets.
 	 * @param {Function} cb - Callback function (err, result).
 	 */
@@ -67,6 +97,15 @@ class EventMaster {
 	listPresets(screen, aux, cb) {
 		const params = { ScreenDest: screen ?? -1, AuxDest: aux ?? -1 }
 		this.postJsonRpc('listPresets', params, cb)
+	}
+
+	/**
+	 * List all presets.
+	 * @param {Function} cb - Callback function (err, result).
+	 */
+	listContent(screen, cb) {
+		const params = { id: parseInt(screen) }
+		this.postJsonRpc('listContent', params, cb)
 	}
 
 	/**
@@ -575,6 +614,38 @@ class EventMaster {
 	mvrLayoutChange(params, cb) {
 		this.postJsonRpc('mvrLayoutChange', params, cb)
 	}
+
+	/**
+     * Subscribe to EventMaster notifications.
+     * @param {string} hostname - Hostname/IP to receive notifications (your server).
+     * @param {number} port - Port your server listens on.
+     * @param {Array<string>} notificationTypes - Types of notifications to subscribe to.
+     * @param {Function} cb - Callback (err, result)
+     */
+    subscribe(hostname, port, notificationTypes, cb) {
+        const params = {
+            hostname,
+            port,
+            notification: notificationTypes,
+        }
+        this.postJsonRpc('subscribe', params, cb)
+    }
+
+    /**
+     * Unsubscribe from EventMaster notifications.
+     * @param {string} hostname - Hostname/IP to unsubscribe.
+     * @param {number} port - Port to unsubscribe.
+     * @param {Array<string>} notificationTypes - Types of notifications to unsubscribe.
+     * @param {Function} cb - Callback (err, result)
+     */
+    unsubscribe(hostname, port, notificationTypes, cb) {
+        const params = {
+            hostname,
+            port,
+            notification: notificationTypes,
+        }
+        this.postJsonRpc('unsubscribe', params, cb)
+    }
 }
 
 module.exports = EventMaster
