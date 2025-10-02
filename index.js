@@ -6,6 +6,18 @@ class EventMaster {
 	constructor(host) {
 		this.host = host
 		this.id = 0
+
+		// Create a dedicated Axios instance with sane defaults and size limits
+		// Limits help mitigate DoS via extremely large payloads.
+		// Adjust if your deployment requires larger transfers.
+		this.http = axios.create({
+			// 10 MB max response body
+			maxContentLength: 10 * 1024 * 1024,
+			// 1 MB max request body (JSON-RPC payloads are typically tiny)
+			maxBodyLength: 1 * 1024 * 1024,
+			// Reasonable timeout to avoid hung sockets
+			timeout: 10_000,
+		})
 	}
 
 	/**
@@ -23,7 +35,7 @@ class EventMaster {
 		}
 		// console.log(`Sending JSON-RPC request: ${JSON.stringify(payload)}`)
 		const url = `http://${this.host}:9999/jsonrpc`
-		axios
+		this.http
 			.post(url, payload)
 			.then((res) => {
 				if (typeof callback === 'function') {
@@ -58,9 +70,11 @@ class EventMaster {
      * @param {number} port - Port to listen on.
      * @param {Function} onNotification - Handler for incoming notifications.
      */
-    startNotificationServer(port, onNotification) {
-        const app = express()
-        app.use(express.json())
+	startNotificationServer(port, onNotification) {
+		const app = express()
+		// Limit JSON body size to mitigate large-payload DoS
+		app.use(express.json({ limit: '1mb' }))
+		// If you ever accept form data, consider also: app.use(express.urlencoded({ extended: false, limit: '1mb' }))
 
         app.post('/', (req, res) => {
             // if (typeof onNotification === 'function') {
